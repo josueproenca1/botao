@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texto Digitado, Botões Coloridos e Comentários</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #ff7a8d, #ffd200);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+            transition: background-color 0.5s ease;
+        }
+
+        .typed-text {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 4px solid #fff;
+            animation: typing 3s steps(30, end), blink 0.7s step-end infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes typing {
+            0% {
+                width: 0;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-red { background-color: #ff4d4d; }
+        .button-blue { background-color: #4d90fe; }
+        .button-green { background-color: #4caf50; }
+        .button-yellow { background-color: #ffeb3b; color: black; }
+        .button-purple { background-color: #9c27b0; }
+        .button-reset { background-color: #333; }
+
+        .percentage {
+            font-size: 1.1rem;
+            color: #fff;
+            margin-left: 10px;
+        }
+
+        .total-clicks {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #fff;
+            margin-top: 20px;
+        }
+
+        /* Seção Principal */
+        .content {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1000px;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Estilos para a Seção de Comentários */
+        #comments-section {
+            display: none;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.7s ease;
+        }
+
+        .comment-section h2 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .comment-section input,
+        .comment-section textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1.1rem;
+            box-sizing: border-box;
+        }
+
+        .comment-section input:focus,
+        .comment-section textarea:focus {
+            border-color: #4caf50;
+            outline: none;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        .comment-section button {
+            padding: 12px 25px;
+            background-color: #4caf50;
+            color: #fff;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .comment-section button:hover {
+            background-color: #45a049;
+        }
+
+        .comment-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 20px;
+        }
+
+        .comment-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .comment-item:hover {
+            background-color: #f1f1f1;
+        }
+
+        .comment-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .comment-item .comment-content {
+            flex-grow: 1;
+        }
+
+        .comment-item p {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .comment-item .username {
+            font-weight: bold;
+            color: #4caf50;
+        }
+
+        /* Botão Voltar */
+        .back-button {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #ff4d4d;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #d33;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tela Principal -->
+    <div class="content" id="main-content">
+        <h2 id="typed-pesquisa" class="typed-text"></h2>
+
+        <div class="button-container">
+            <button class="button button-red" id="button-red">Vermelho <span class="percentage" id="percent-red">0%</span></button>
+            <button class="button button-blue" id="button-blue">Azul <span class="percentage" id="percent-blue">0%</span></button>
+            <button class="button button-green" id="button-green">Verde <span class="percentage" id="percent-green">0%</span></button>
+            <button class="button button-yellow" id="button-yellow">Amarelo <span class="percentage" id="percent-yellow">0%</span></button>
+            <button class="button button-purple" id="button-purple">Roxo <span class="percentage" id="percent-purple">0%</span></button>
+            <button class="button button-reset" id="button-reset">Resetar</button>
+        </div>
+
+        <div class="total-clicks" id="total-clicks">Total de Cliques: 0</div>
+    </div>
+
+    <!-- Comentários por Cor -->
+    <div id="comments-section">
+        <div class="comment-section">
+            <h2 id="color-name"></h2>
+            <input type="text" id="user-name" placeholder="Digite seu nome (Nick)">
+            <input type="file" id="user-avatar" accept="image/*" />
+            <textarea id="comment-input" placeholder="Digite seu comentário..."></textarea>
+            <button id="submit-comment">Enviar Comentário</button>
+            <div class="comment-list" id="comment-list"></div>
+            <button class="back-button" id="back-button">Voltar</button>
+        </div>
+    </div>
+
+    <script>
+        const buttons = {
+            red: document.getElementById('button-red'),
+            blue: document.getElementById('button-blue'),
+            green: document.getElementById('button-green'),
+            yellow: document.getElementById('button-yellow'),
+            purple: document.getElementById('button-purple'),
+            reset: document.getElementById('button-reset')
+        };
+
+        const percentages = {
+            red: document.getElementById('percent-red'),
+            blue: document.getElementById('percent-blue'),
+            green: document.getElementById('percent-green'),
+            yellow: document.getElementById('percent-yellow'),
+            purple: document.getElementById('percent-purple')
+        };
+
+        let clickCount = {
+            red: 0,
+            blue: 0,
+            green: 0,
+            yellow: 0,
+            purple: 0,
+            total: 0
+        };
+
+        let comments = {
+            red: [],
+            blue: [],
+            green: [],
+            yellow: [],
+            purple: []
+        };
+
+        function updatePercentages() {
+            clickCount.total = clickCount.red + clickCount.blue + clickCount.green + clickCount.yellow + clickCount.purple;
+            for (let color in clickCount) {
+                if (color !== 'total') {
+                    const percentage = (clickCount[color] / clickCount.total) * 100 || 0;
+                    percentages[color].textContent = `${percentage.toFixed(1)}%`;
+                }
+            }
+            document.getElementById('total-clicks').textContent = `Total de Cliques: ${clickCount.total}`;
+        }
+
+        function handleButtonClick(color) {
+            clickCount[color]++;
+            updatePercentages();
+            document.body.style.backgroundColor = color;
+            window.location.hash = `#${color}-comments`;
+            showCommentSection(color);
+        }
+
+        buttons.red.addEventListener('click', () => handleButtonClick('red'));
+        buttons.blue.addEventListener('click', () => handleButtonClick('blue'));
+        buttons.green.addEventListener('click', () => handleButtonClick('green'));
+        buttons.yellow.addEventListener('click', () => handleButtonClick('yellow'));
+        buttons.purple.addEventListener('click', () => handleButtonClick('purple'));
+
+        document.getElementById('back-button').addEventListener('click', () => {
+            document.getElementById('comments-section').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            window.location.hash = '';
+        });
+
+        function showCommentSection(color) {
+            document.getElementById('main-content').style.display = 'none';
+            document.getElementById('comments-section').style.display = 'block';
+            document.getElementById('color-name').textContent = color.charAt(0).toUpperCase() + color.slice(1);
+            const commentList = document.getElementById('comment-list');
+            commentList.innerHTML = '';
+            comments[color].forEach(comment => {
+                const div = document.createElement('div');
+                div.classList.add('comment-item');
+                div.innerHTML = `
+                    <img src="${comment.avatar}" alt="avatar">
+                    <div class="comment-content">
+                        <p class="username">${comment.username}</p>
+                        <p>${comment.comment}</p>
+                    </div>
+                `;
+                commentList.appendChild(div);
+            });
+        }
+
+        document.getElementById('submit-comment').addEventListener('click', () => {
+            const color = window.location.hash.replace('#', '').split('-')[0];
+            const username = document.getElementById('user-name').value;
+            const commentText = document.getElementById('comment-input').value;
+            const avatarFile = document.getElementById('user-avatar').files[0];
+
+            if (username && commentText) {
+                let avatarUrl = '';
+                if (avatarFile) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        avatarUrl = reader.result;
+                        comments[color].push({ username, comment: commentText, avatar: avatarUrl });
+                        document.getElementById('user-name').value = '';
+                        document.getElementById('comment-input').value = '';
+                        document.getElementById('user-avatar').value = '';
+                        showCommentSection(color);
+                    };
+                    reader.readAsDataURL(avatarFile);
+                } else {
+                    comments[color].push({ username, comment: commentText, avatar: 'https://via.placeholder.com/40' });
+                    document.getElementById('user-name').value = '';
+                    document.getElementById('comment-input').value = '';
+                    document.getElementById('user-avatar').value = '';
+                    showCommentSection(color);
+                }
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        });
+
+        buttons.reset.addEventListener('click', () => {
+            clickCount = { red: 0, blue: 0, green: 0, yellow: 0, purple: 0, total: 0 };
+            updatePercentages();
+        });
+
+        // Animação de texto digitado
+        const typedText = "Clique em uma das cores para votar e comentar!";
+        let i = 0;
+        function type() {
+            if (i < typedText.length) {
+                document.getElementById('typed-pesquisa').textContent += typedText.charAt(i);
+                i++;
+                setTimeout(type, 100);
+            }
+        }
+        type();
+    </script>
+
+</body>
+</html>
